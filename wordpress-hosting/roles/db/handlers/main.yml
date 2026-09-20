@@ -1,0 +1,11 @@
+---
+- name: Start and enable mariadb
+  ansible.builtin.systemd:
+    name: "{{ db_service }}"
+    state: started
+    enabled: true
+
+- name: Restart mariadb
+  ansible.builtin.systemd:
+    name: "{{ db_service }}"
+    state: restarted

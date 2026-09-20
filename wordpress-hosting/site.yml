@@ -1,0 +1,10 @@
+---
+- name: Configure Wordpress on Amazon Linux 2023
+  hosts: webservers
+  become: true
+
+  roles:
+    - common
+    - web
+    - db
+    - wordpress

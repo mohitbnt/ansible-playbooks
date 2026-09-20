@@ -1,0 +1,29 @@
+http_port: 80
+https_port: 443
+php_version: 8.4
+
+apache_packages:
+  - httpd
+  - mod_ssl
+
+php_packages:
+  - "php{{ php_version }}"
+  - "php{{ php_version }}-fpm"
+  - "php{{ php_version }}-mysqlnd"
+  - "php{{ php_version }}-devel"
+  - "php{{ php_version }}-gd"
+  - "php{{ php_version }}-intl"
+  - "php{{ php_version }}-mbstring"
+  - "php{{ php_version }}-xml"
+
+apache_service: httpd
+php_service: php-fpm
+
+domain_name: "example.com"
+wp_site_root: "/var/www/html/{{domain_name}}"
+
+ssl_cert_dest: "/etc/pki/tls/certs/{{ domain_name }}.crt"
+ssl_key_dest: "/etc/pki/tls/private/{{ domain_name }}.key"
+
+ssl_cert_src: "wordpress.crt"
+ssl_key_src: "wordpress.key"

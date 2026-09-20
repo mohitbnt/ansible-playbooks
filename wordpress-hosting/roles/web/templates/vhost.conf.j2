@@ -1,0 +1,42 @@
+# 1. HTTP Configuration - Redirects all traffic to HTTPS
+<VirtualHost *:{{ http_port }}>
+    ServerName {{ domain_name }}
+    ServerAlias www.{{ domain_name }}
+    
+    # Redirect all HTTP requests to HTTPS permanently
+    Redirect permanent / https://{{ domain_name }}
+</VirtualHost>
+
+# 2. HTTPS Configuration - Core WordPress Setup
+<VirtualHost *:{{ https_port }}>
+    ServerName {{ domain_name }}
+    ServerAlias www.{{ domain_name }}
+
+    # Change this to the path where your WordPress files are located
+    DocumentRoot {{ wp_site_root }}
+
+    # SSL Certificate Paths (Replace with your actual paths, e.g., Let's Encrypt)
+    SSLEngine on
+    SSLCertificateFile {{ ssl_cert_dest }}
+    SSLCertificateKeyFile {{ ssl_key_dest }}
+
+    # Log Management
+    ErrorLog /var/log/httpd/{{ domain_name }}_error.log
+    CustomLog /var/log/httpd/{{ domain_name }}_access.log combined
+
+    # Directory Permissions and WordPress Pretty Permalinks Rules
+    <Directory {{ wp_site_root }}>
+        Options Indexes FollowSymLinks MultiViews
+        AllowOverride All
+        Require all granted
+
+        # WordPress Directory Index fallback
+        DirectoryIndex index.php index.html
+    </Directory>
+
+    # Security Headers (Highly Recommended for Production)
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set X-XSS-Protection "1; mode=block"
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+</VirtualHost>

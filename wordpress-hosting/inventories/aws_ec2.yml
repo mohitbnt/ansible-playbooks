@@ -1,0 +1,24 @@
+plugin: amazon.aws.aws_ec2
+regions:
+  - us-east-1  # Change to your AWS region (e.g., ap-south-1, us-west-2)
+
+# Filter only running EC2 instances with your specific tag
+filters:
+  instance-state-name: running
+  tag:Environment: Production
+
+# Group instances into 'webservers' so your site.yml works without code changes
+keyed_groups:
+  - key: webservers
+    prefix: ""
+    separator: ""
+
+# Use public IP addresses to connect over SSH
+hostnames:
+  - ip-address
+  - dns-name
+
+# Set variables needed for Ansible connection
+compose:
+  ansible_host: ip_address
+  ansible_user: "'ec2-user'"

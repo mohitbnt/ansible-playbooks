@@ -1,0 +1,31 @@
+---
+- name: Upgrade all system packages
+  ansible.builtin.dnf:
+    name: "*"
+    state: latest
+    update_cache: true
+  register: dnf_update_result
+
+- name: Install python3-pip
+  ansible.builtin.dnf:
+    name: python3-pip
+    state: present
+
+- name: Install PyMySQL via pip
+  ansible.builtin.pip:
+    name: pymysql
+    state: present
+
+- name: Check if reboot is required
+  ansible.builtin.command: needs-restarting -r
+  failed_when: false
+  changed_when: false
+  register: reboot_required
+
+- name: Reboot the server if required
+  ansible.builtin.reboot:
+    msg: "Reboot initiated by Ansible role after package upgrade"
+    connect_timeout: 5
+    reboot_timeout: 300
+    pre_reboot_delay: 2
+  when: reboot_required.rc == 1 or dnf_update_result.changed

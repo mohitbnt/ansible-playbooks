@@ -1,0 +1,42 @@
+---
+- name: Install Apache and PHP
+  ansible.builtin.dnf:
+    name: "{{ apache_packages + php_packages }}"
+    state: present
+    update_cache: true
+  notify: 
+    - Start and Enable Apache
+    - Start and Enable PHP-FPM
+
+- name: Ensure  Wordpress document root exist
+  ansible.builtin.file:
+    path: "{{ wp_site_root }}"
+    state: directory
+    owner: apache
+    group: apache
+    mode: '0755'
+  
+- name: Upload SSL certificate file
+  ansible.builtin.copy:
+    src: "{{ ssl_cert_src }}"
+    dest: "{{ ssl_cert_dest }}"
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Upload private key file
+  ansible.builtin.copy:
+    src: "{{ ssl_key_src }}"
+    dest: "{{ ssl_key_dest }}"
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Deploy Apache virtulhost configuration
+  ansible.builtin.template:
+    src: vhost.conf.j2
+    dest: "/etc/httpd/conf.d/{{ domain_name }}.conf"
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Reload apache

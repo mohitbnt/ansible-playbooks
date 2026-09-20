@@ -1,0 +1,8 @@
+---
+domain_name: wp.cloudsystemonline.com
+
+php_version: 8.4
+
+mariadb_version: 114
+
+wp_download_url: "https://wordpress.org/latest.tar.gz"

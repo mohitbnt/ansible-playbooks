@@ -1,0 +1,38 @@
+---
+- name: Install MariaDB Server
+  ansible.builtin.dnf:
+    name: "{{ mariadb_package }}"
+    state: present
+    update_cache: true
+  notify: Start and enable mariadb
+
+- name: Force handler to run immediately 
+  ansible.builtin.meta: flush_handlers
+
+- name: Update root password for MariaDB
+  community.mysql.mysql_user:
+    name: root
+    password: "{{ db_root_password }}"
+    login_user: root
+    login_password: "{{ db_root_password }}"
+    check_implicit_admin: true
+    login_unix_socket: /var/lib/mysql/mysql.sock
+    column_case_sensitive: false
+    state: present
+
+- name: Create database for wordpress
+  community.mysql.mysql_db:
+    name: "{{ db_name }}"
+    login_user: root
+    login_password: "{{ db_root_password }}"
+    state: present
+
+- name: Create database user for wordpress and grant priviliges
+  community.mysql.mysql_user:
+    name: "{{ db_user }}"
+    password: "{{ db_password }}"
+    priv: "{{ db_name }}.*:ALL"
+    host: "localhost"
+    login_user: root
+    login_password: "{{ db_root_password }}"
+    state: present

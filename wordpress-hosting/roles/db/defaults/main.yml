@@ -1,0 +1,10 @@
+db_service: "mariadb.service"
+mariadb_version: "105"
+
+mariadb_package: "mariadb{{ mariadb_version }}-server"
+
+
+db_name: wordpress_db
+db_user: wordpress_user
+db_password: db_user_password
+db_root_password: root_password

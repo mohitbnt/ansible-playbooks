@@ -1,0 +1,27 @@
+# Ansible Vault Passwords & Keys
+*.vault-pass
+.vault-pass
+*.key
+*.pem
+*.rsa
+
+# Ignore local temporary inventory / backup files
+*.retry
+*.log
+*.tmp
+/tmp/
+
+# Python / Cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+
+# IDE & OS files
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*~

@@ -1,0 +1,27 @@
+---
+- name: Start and Enable Apache
+  ansible.builtin.systemd:
+    name: "{{ apache_service }}"
+    state: started
+    enabled: true
+  
+- name: Reload apache
+  ansible.builtin.systemd:
+    name: "{{ apache_service }}"
+    state: reloaded
+
+- name: Restart apache
+  ansible.builtin.systemd:
+    name: "{{ apache_service }}"
+    state: restarted
+
+- name: Start and Enable PHP-FPM
+  ansible.builtin.systemd:
+    name: "{{ php-fpm_service }}"
+    state: started
+    enabled: true
+
+- name: Restart apache
+  ansible.builtin.systemd:
+    name: "{{ php-fpm_service }}"
+    state: restarted

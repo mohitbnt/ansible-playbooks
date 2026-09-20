@@ -1,0 +1,5 @@
+wp_download_url: "https://wordpress.org/latest.zip"
+
+db_host: "127.0.0.1"
+
+wp_site_root: "/var/www/html/{{ domain_name }}"
